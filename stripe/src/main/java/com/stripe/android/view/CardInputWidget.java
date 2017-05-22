@@ -57,12 +57,14 @@ public class CardInputWidget extends LinearLayout {
 
     // This value is used to ensure that onSaveInstanceState is called
     // in the event that the user doesn't give this control an ID.
-    private static final @IdRes int DEFAULT_READER_ID = 42424242;
+    private static final
+    @IdRes
+    int DEFAULT_READER_ID = 42424242;
 
     private static final long ANIMATION_LENGTH = 150L;
 
-    private static final Map<String , Integer> BRAND_RESOURCE_MAP =
-            new HashMap<String , Integer>() {{
+    private static final Map<String, Integer> BRAND_RESOURCE_MAP =
+            new HashMap<String, Integer>() {{
                 put(Card.AMERICAN_EXPRESS, R.drawable.ic_amex);
                 put(Card.DINERS_CLUB, R.drawable.ic_diners);
                 put(Card.DISCOVER, R.drawable.ic_discover);
@@ -80,8 +82,12 @@ public class CardInputWidget extends LinearLayout {
 
     private FrameLayout mFrameLayout;
 
-    private @ColorInt int mErrorColorInt;
-    private @ColorInt int mTintColorInt;
+    private
+    @ColorInt
+    int mErrorColorInt;
+    private
+    @ColorInt
+    int mTintColorInt;
 
     private boolean mIsAmEx;
     private boolean mInitFlag;
@@ -144,6 +150,39 @@ public class CardInputWidget extends LinearLayout {
             return true;
         }
         return super.onInterceptTouchEvent(ev);
+    }
+
+    public void setCardNumber(String cardNumber) {
+        mCardNumberEditText.setText(cardNumber);
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        mExpiryDateEditText.setText(expiryDate);
+    }
+
+    public void clearCvc() {
+        mCvcNumberEditText.setText("");
+    }
+
+    public void clearInputs() {
+        setCardNumber("");
+        setExpiryDate("");
+        clearCvc();
+        mCvcNumberEditText.clearFocus();
+        mExpiryDateEditText.clearFocus();
+        mCvcNumberEditText.clearFocus();
+    }
+
+    public void requestFocusOnCard() {
+        mCardNumberEditText.requestFocus();
+    }
+
+    public void requestFocusOnExpiry() {
+        mExpiryDateEditText.requestFocus();
+    }
+
+    public void requestFocusOnCvc() {
+        mCvcNumberEditText.requestFocus();
     }
 
     @Override
@@ -211,7 +250,7 @@ public class CardInputWidget extends LinearLayout {
             if (touchX < frameStart + mPlacementParameters.cardWidth) {
                 // Then the card edit view will already handle this touch.
                 return null;
-            } else if (touchX < mPlacementParameters.cardTouchBufferLimit){
+            } else if (touchX < mPlacementParameters.cardTouchBufferLimit) {
                 // Then we want to act like this was a touch on the card view
                 return mCardNumberEditText;
             } else if (touchX < mPlacementParameters.dateStartPosition) {
@@ -227,7 +266,7 @@ public class CardInputWidget extends LinearLayout {
             if (touchX < frameStart + mPlacementParameters.peekCardWidth) {
                 // This was a touch on the card number editor, so we don't need to handle it.
                 return null;
-            } else if( touchX < mPlacementParameters.cardTouchBufferLimit) {
+            } else if (touchX < mPlacementParameters.cardTouchBufferLimit) {
                 // Then we need to act like the user touched the card editor
                 return mCardNumberEditText;
             } else if (touchX < mPlacementParameters.dateStartPosition) {
@@ -314,8 +353,8 @@ public class CardInputWidget extends LinearLayout {
                     + mPlacementParameters.cardDateSeparation;
             mPlacementParameters.dateRightTouchBufferLimit =
                     mPlacementParameters.dateStartPosition
-                    + mPlacementParameters.dateWidth
-                    + mPlacementParameters.dateCvcSeparation / 2;
+                            + mPlacementParameters.dateWidth
+                            + mPlacementParameters.dateCvcSeparation / 2;
             mPlacementParameters.cvcStartPosition = mPlacementParameters.dateStartPosition
                     + mPlacementParameters.dateWidth
                     + mPlacementParameters.dateCvcSeparation;
@@ -554,7 +593,7 @@ public class CardInputWidget extends LinearLayout {
 
         final int dateDestination =
                 mPlacementParameters.peekCardWidth
-                + mPlacementParameters.cardDateSeparation;
+                        + mPlacementParameters.cardDateSeparation;
 
         Animation slideDateRightAnimation = new Animation() {
             @Override
@@ -572,9 +611,9 @@ public class CardInputWidget extends LinearLayout {
 
         final int cvcDestination =
                 mPlacementParameters.peekCardWidth
-                + mPlacementParameters.cardDateSeparation
-                + mPlacementParameters.dateWidth
-                + mPlacementParameters.dateCvcSeparation;
+                        + mPlacementParameters.cardDateSeparation
+                        + mPlacementParameters.dateWidth
+                        + mPlacementParameters.dateCvcSeparation;
         final int cvcStartMargin = cvcDestination + (dateStartMargin - dateDestination);
 
         Animation slideCvcRightAnimation = new Animation() {
@@ -691,18 +730,18 @@ public class CardInputWidget extends LinearLayout {
     private void updateCvc(@NonNull @Card.CardBrand String brand) {
         if (Card.AMERICAN_EXPRESS.equals(brand)) {
             mCvcNumberEditText.setFilters(
-                    new InputFilter[] {new InputFilter.LengthFilter(CardUtils.CVC_LENGTH_AMEX)});
+                    new InputFilter[]{new InputFilter.LengthFilter(CardUtils.CVC_LENGTH_AMEX)});
             mCvcNumberEditText.setHint(R.string.cvc_amex_hint);
         } else {
             mCvcNumberEditText.setFilters(
-                    new InputFilter[] {new InputFilter.LengthFilter(CardUtils.CVC_LENGTH_COMMON)});
+                    new InputFilter[]{new InputFilter.LengthFilter(CardUtils.CVC_LENGTH_COMMON)});
             mCvcNumberEditText.setHint(R.string.cvc_number_hint);
         }
     }
 
     private void updateIcon(@NonNull @Card.CardBrand String brand) {
         if (Card.UNKNOWN.equals(brand)) {
-            Drawable icon  = getResources().getDrawable(R.drawable.ic_unknown);
+            Drawable icon = getResources().getDrawable(R.drawable.ic_unknown);
             mCardIconImageView.setImageDrawable(icon);
             applyTint(false);
         } else {
@@ -729,6 +768,7 @@ public class CardInputWidget extends LinearLayout {
     @VisibleForTesting
     interface DimensionOverrideSettings {
         int getPixelWidth(@NonNull String text, @NonNull EditText editText);
+
         int getFrameWidth();
     }
 
@@ -781,21 +821,21 @@ public class CardInputWidget extends LinearLayout {
         @Override
         public String toString() {
             String touchBufferData = String.format("Touch Buffer Data:\n" +
-                    "CardTouchBufferLimit = %d\n" +
-                    "DateStartPosition = %d\n" +
-                    "DateRightTouchBufferLimit = %d\n" +
-                    "CvcStartPosition = %d",
+                            "CardTouchBufferLimit = %d\n" +
+                            "DateStartPosition = %d\n" +
+                            "DateRightTouchBufferLimit = %d\n" +
+                            "CvcStartPosition = %d",
                     cardTouchBufferLimit,
                     dateStartPosition,
                     dateRightTouchBufferLimit,
                     cvcStartPosition);
             String elementSizeData = String.format("CardWidth = %d\n" +
-                    "HiddenCardWidth = %d\n" +
-                    "PeekCardWidth = %d\n" +
-                    "CardDateSeparation = %d\n" +
-                    "DateWidth = %d\n" +
-                    "DateCvcSeparation = %d\n" +
-                    "CvcWidth = %d\n",
+                            "HiddenCardWidth = %d\n" +
+                            "PeekCardWidth = %d\n" +
+                            "CardDateSeparation = %d\n" +
+                            "DateWidth = %d\n" +
+                            "DateCvcSeparation = %d\n" +
+                            "CvcWidth = %d\n",
                     cardWidth,
                     hiddenCardWidth,
                     peekCardWidth,
